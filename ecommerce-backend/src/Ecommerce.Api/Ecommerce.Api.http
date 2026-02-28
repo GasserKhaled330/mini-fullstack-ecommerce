@@ -1,3 +1,49 @@
-@Ecommerce.Api_HostAddress = http://localhost:5210
+@Ecommerce.Api_HostAddress = http://localhost:5010
+@ProductId = 12
 
+### US-01: Create a New Product
+# Validates price > 0 and stock >= 0
+POST {{Ecommerce.Api_HostAddress}}/api/products
+Content-Type: application/json
+
+{
+  "name": "Gaming Mouse",
+  "description": "RGB Wireless Gaming Mouse",
+  "price": 59.99,
+  "quantity": 50
+}
+
+### US-02: List Products (Paginated)
+# Tests the PagedResponse wrapper
+GET {{Ecommerce.Api_HostAddress}}/api/products?pageNumber=2&pageSize=6
+Accept: application/json
+
+### Get Product By ID
+GET {{Ecommerce.Api_HostAddress}}/api/products/{{ProductId}}
+Accept: application/json
+
+### Update Product
+PUT {{Ecommerce.Api_HostAddress}}/api/products/{{ProductId}}
+Content-Type: application/json
+
+{
+  "name": "Gaming Mouse Pro",
+  "description": "Updated RGB Wireless Gaming Mouse",
+  "price": 65.00,
+  "quantity": 45
+}
+
+### Delete Product
+DELETE {{Ecommerce.Api_HostAddress}}/api/products/{{ProductId}}
+
+### Test Validation: Create Product with Invalid Price (Should return 400)
+POST {{Ecommerce.Api_HostAddress}}/api/products
+Content-Type: application/json
+
+{
+  "name": "Broken Item",
+  "description": "Invalid Price",
+  "price": -10.00,
+  "quantity": 5
+}
 
