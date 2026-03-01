@@ -5,6 +5,9 @@ public static class ValidatorsConfiguration
 	public static void AddValidators(this IServiceCollection services)
 	{
 		services.AddValidatorsFromAssemblyContaining<CreateProductRequestValidator>();
-		services.AddFluentValidationAutoValidation();
+		services.AddFluentValidationAutoValidation(configuration =>
+		{
+			configuration.OverrideDefaultResultFactoryWith<CustomValidationResultFactory>();
+		});
 	}
 }

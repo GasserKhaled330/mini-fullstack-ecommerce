@@ -15,3 +15,7 @@ global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
 global using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 global using System.Net.Mime;
+global using Ecommerce.Api.Filters;
+global using Microsoft.AspNetCore.Mvc.Filters;
+global using SharpGrip.FluentValidation.AutoValidation.Mvc.Results;
+global using FluentValidation.Results;
