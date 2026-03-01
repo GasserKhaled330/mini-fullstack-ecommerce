@@ -6,7 +6,9 @@ public class ProductService(IApplicationDbContext context) : IProductService
 	{
 		var product = await context.Products.FindAsync(id);
 
-		return product is null ? Result<ProductDto>.Failure("Product not found", ErrorType.NotFound) : Result<ProductDto>.Success(product.ToDto());
+		return product is null
+				? Result<ProductDto>.Failure("Product not found", ErrorType.NotFound)
+				: Result<ProductDto>.Success(product.ToDto());
 	}
 
 	public async Task<Result<PagedResponse<IReadOnlyList<ProductDto>>>> GetAllAsync(
@@ -17,17 +19,15 @@ public class ProductService(IApplicationDbContext context) : IProductService
 		var totalCount = await context.Products.CountAsync();
 
 		var products = await context
-				.Products.Skip((pageNumber - 1) * pageSize)
+				.Products.AsNoTracking()
+				.Skip((pageNumber - 1) * pageSize)
 				.Take(pageSize)
 				.Select(p => p.ToDto())
 				.ToListAsync();
 
-		return Result<PagedResponse<IReadOnlyList<ProductDto>>>.Success(new PagedResponse<IReadOnlyList<ProductDto>>(
-				products,
-				pageNumber,
-				pageSize,
-				totalCount
-		));
+		return Result<PagedResponse<IReadOnlyList<ProductDto>>>.Success(
+				new PagedResponse<IReadOnlyList<ProductDto>>(products, pageNumber, pageSize, totalCount)
+		);
 	}
 
 	public async Task<Result<ProductDto>> CreateAsync(CreateProductRequest createProductRequest)
@@ -43,7 +43,10 @@ public class ProductService(IApplicationDbContext context) : IProductService
 		var existingProduct = await context.Products.FindAsync(id);
 		if (existingProduct is null)
 		{
-			return Result<ProductDto>.Failure($"Product with id {id} not found.", ErrorType.NotFound);
+			return Result<ProductDto>.Failure(
+					$"Product with id {id} not found.",
+					ErrorType.NotFound
+			);
 		}
 		dto.UpdateEntity(existingProduct);
 		await context.SaveChangesAsync();
