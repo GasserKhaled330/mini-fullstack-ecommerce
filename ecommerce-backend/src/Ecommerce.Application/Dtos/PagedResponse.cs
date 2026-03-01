@@ -2,7 +2,7 @@
 
 public sealed record PagedResponse<T>
 (
-	T Data,
+	T Items,
 	int PageNumber,
 	int PageSize,
 	int TotalItems

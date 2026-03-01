@@ -12,7 +12,6 @@ public class OrderService(IApplicationDbContext context) : IOrderService
 		{
 			var product = await context.Products.FindAsync(itemRequest.ProductId);
 
-			// 1. Validate Existence
 			if (product == null)
 			{
 				return Result<OrderDto>.Failure(
@@ -21,7 +20,6 @@ public class OrderService(IApplicationDbContext context) : IOrderService
 				);
 			}
 
-			// 2. Validate Stock (US-03)
 			if (product.Quantity < itemRequest.Quantity)
 			{
 				return Result<OrderDto>.Failure(
@@ -30,7 +28,6 @@ public class OrderService(IApplicationDbContext context) : IOrderService
 				);
 			}
 
-			// 3. Deduct Stock
 			product.Quantity -= itemRequest.Quantity;
 
 			var orderItem = new OrderItem
@@ -40,11 +37,10 @@ public class OrderService(IApplicationDbContext context) : IOrderService
 				UnitPrice = product.Price,
 			};
 
-			order.Items.Add(orderItem);
+			order.OrderItems.Add(orderItem);
 			subtotal += (orderItem.UnitPrice * orderItem.Quantity);
 		}
 
-		// 4. Calculate Discount (US-04)
 		order.DiscountAmount = CalculateDiscount(subtotal, totalItemsCount);
 		order.TotalAmount = subtotal - order.DiscountAmount;
 
@@ -57,7 +53,7 @@ public class OrderService(IApplicationDbContext context) : IOrderService
 	public async Task<Result<OrderDto>> GetByIdAsync(int id)
 	{
 		var order = await context
-				.Orders.Include(o => o.Items)
+				.Orders.Include(o => o.OrderItems)
 						.ThenInclude(oi => oi.Product)
 				.FirstOrDefaultAsync(o => o.Id == id);
 		return order == null
@@ -67,16 +63,6 @@ public class OrderService(IApplicationDbContext context) : IOrderService
 
 	private decimal CalculateDiscount(decimal subtotal, int totalQuantity)
 	{
-		if (totalQuantity >= 5)
-		{
-			return subtotal * 0.10m; // 10% discount
-		}
-
-		if (totalQuantity >= 2)
-		{
-			return subtotal * 0.05m; // 5% discount
-		}
-
-		return 0;
+		return totalQuantity >= 5 ? subtotal * 0.10m : totalQuantity >= 2 ? subtotal * 0.05m : 0;
 	}
 }

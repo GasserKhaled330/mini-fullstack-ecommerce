@@ -6,5 +6,5 @@ public class Order : BaseEntity
 	public decimal TotalAmount { get; set; }
 	public decimal DiscountAmount { get; set; }
 	public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-	public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
+	public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 }

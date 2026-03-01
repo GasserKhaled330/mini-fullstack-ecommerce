@@ -14,7 +14,7 @@ public class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
 		builder.Property(o => o.TimeStamp)
 			.IsRowVersion();
 
-		builder.HasMany(o => o.Items)
+		builder.HasMany(o => o.OrderItems)
 				 .WithOne(oi => oi.Order)
 				 .HasForeignKey(oi => oi.OrderId)
 				 .OnDelete(DeleteBehavior.Cascade);
