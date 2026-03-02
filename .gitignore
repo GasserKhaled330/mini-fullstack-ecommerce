@@ -416,5 +416,4 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
-ecommerce-backend/src/Ecommerce.Api/appsettings.Development.json
-ecommerce-backend/src/Ecommerce.Api/appsettings.json
+
