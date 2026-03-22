@@ -3,6 +3,9 @@
 [ApiVersion("1.0")]
 public class OrdersController(IOrderService orderService) : BaseApiController
 {
+	/// <summary>
+	/// Creates a new order.
+	/// </summary>
 	[HttpPost]
 	[ProducesResponseType(typeof(OrderDto), StatusCodes.Status201Created)]
 	[ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -17,6 +20,9 @@ public class OrdersController(IOrderService orderService) : BaseApiController
 		);
 	}
 
+	/// <summary>
+	/// Retrieves a specific order by its ID.
+	/// </summary>
 	[HttpGet("{id:int}", Name = nameof(GetById))]
 	[ProducesResponseType(typeof(OrderDto), StatusCodes.Status200OK)]
 	[ProducesResponseType(StatusCodes.Status404NotFound)]

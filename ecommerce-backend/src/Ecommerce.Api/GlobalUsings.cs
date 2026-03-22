@@ -25,3 +25,4 @@ global using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 global using SharpGrip.FluentValidation.AutoValidation.Mvc.Results;
 global using Swashbuckle.AspNetCore.SwaggerGen;
 global using System.Net.Mime;
+global using System.Reflection;
